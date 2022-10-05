@@ -1,9 +1,13 @@
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
 from lib.my_requests import MyRequests
+import allure
 
 class TestUserDelete(BaseCase):
 
+    @allure.title("Deleting a user with id 2")
+    @allure.severity(allure.severity_level.TRIVIAL)
+    @allure.story('Story for deleting users')
     def test_delete_user_2(self):
         # LOGIN
         data = {
@@ -25,6 +29,8 @@ class TestUserDelete(BaseCase):
         assert response2.content.decode(
             "utf-8") == "Please, do not delete test users with ID 1, 2, 3, 4 or 5.", f"Unexpected response content {response2.content}"
 
+    @allure.title("Creating a user, authorization with his credentials and then deleting him")
+    @allure.severity(allure.severity_level.NORMAL)
     def test_delete_just_created_user(self):
         # REGISTER
         register_data = self.prepare_registration_data()
@@ -63,6 +69,11 @@ class TestUserDelete(BaseCase):
         assert response4.content.decode(
             "utf-8") == "User not found", f"Unexpected response content {response4.content}"
 
+    @allure.testcase("https://github.com/Kr1sPo/LearnQA_Python_API/blob/main/tests/test_user_delete.py", 'Допустим, '
+                                                                                                         'это ссылка '
+                                                                                                         'на '
+                                                                                                         'тест-кейс')
+    @allure.severity(allure.severity_level.NORMAL)
     def test_delete_user_auth_as_another_user(self):
         # REGISTER
         register_data = self.prepare_registration_data()
