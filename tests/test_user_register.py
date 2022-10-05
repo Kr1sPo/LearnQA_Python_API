@@ -1,7 +1,6 @@
 import random
 import string
-
-import requests
+from lib.my_requests import MyRequests
 import pytest
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
@@ -20,7 +19,7 @@ class TestUserRegister(BaseCase):
     def test_create_user_successfully(self):
         data = self.prepare_registration_data()
 
-        response = requests.post('https://playground.learnqa.ru/api/user/', data=data)
+        response = MyRequests.post('user/', data=data)
 
         Assertions.assert_code_status(response, 200)
         Assertions.assert_json_has_key(response, "id")
@@ -29,7 +28,7 @@ class TestUserRegister(BaseCase):
         email = 'vinkotov@example.com'
         data = self.prepare_registration_data(email)
 
-        response = requests.post('https://playground.learnqa.ru/api/user/', data=data)
+        response = MyRequests.post('user/', data=data)
 
         Assertions.assert_code_status(response, 400)
         assert response.content.decode(
@@ -39,7 +38,7 @@ class TestUserRegister(BaseCase):
         incorrect_email = "learnqaexample.com"
         data = self.prepare_registration_data(incorrect_email)
 
-        response = requests.post('https://playground.learnqa.ru/api/user/', data=data)
+        response = MyRequests.post('user/', data=data)
 
         Assertions.assert_code_status(response, 400)
         assert response.content.decode(
@@ -48,7 +47,7 @@ class TestUserRegister(BaseCase):
     @pytest.mark.parametrize('condition', exclude_fields)
     def test_create_user_without_any_field(self, condition):
         data = self.prepare_registration_data(None, condition)
-        response = requests.post('https://playground.learnqa.ru/api/user/', data=data)
+        response = MyRequests.post('user/', data=data)
 
         field_name = condition.split('_')
 
@@ -61,7 +60,7 @@ class TestUserRegister(BaseCase):
         firstName = ''.join(random.choices(string.ascii_letters, k=length))
         data = self.prepare_registration_data(None, None, firstName)
 
-        response = requests.post('https://playground.learnqa.ru/api/user/', data=data)
+        response = MyRequests.post('user/', data=data)
 
         Assertions.assert_code_status(response, 400)
         assert response.content.decode(
@@ -71,7 +70,7 @@ class TestUserRegister(BaseCase):
         firstName = ''.join(random.choices(string.ascii_letters, k=1))
         data = self.prepare_registration_data(None, None, firstName)
 
-        response = requests.post('https://playground.learnqa.ru/api/user/', data=data)
+        response = MyRequests.post('user/', data=data)
 
         Assertions.assert_code_status(response, 400)
         assert response.content.decode(
